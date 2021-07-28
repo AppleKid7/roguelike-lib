@@ -1,4 +1,4 @@
-package roguelike.terminal
+package indigo.lib.roguelike.terminal
 
 import indigo.RGB
 import indigo.RGBA
@@ -6,7 +6,6 @@ import indigo.Point
 import indigo.Size
 
 import indigo.lib.roguelike.DfTiles.Tile
-import indigo.lib.roguelike.terminal.{MapTile, TerminalEmulator}
 
 class TerminalEmulatorTests extends munit.FunSuite {
 

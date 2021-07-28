@@ -8,6 +8,40 @@ import indigoextras.trees.QuadTree.{QuadBranch, QuadEmpty, QuadLeaf}
 import scala.annotation.tailrec
 
 object MapUtils {
+  // Convert the x and y coordinates of a point to an index on the grid
+  def toListIndex(x: Int, y: Int, width: Int): Int =
+    x * width + y
+
+  // Find the positions on the grid corresponding to a given rectangle
+  def findRectOnGrid[T](rect: Rectangle, grid: List[T], gridWidth: Int): List[Int] =
+    val from = rect.topLeft
+    val to = rect.bottomRight
+    val gridHeight = grid.length / gridWidth
+    val yLimit = Math.min(gridHeight - 1, to.y)
+    val xLimit = Math.min(to.x, gridWidth - 1)
+    @tailrec
+    def rec(y: Int, acc: Set[Point]): Set[Point] =
+      if y <= yLimit then
+        val xCoords = Math.max(from.x, 0) to xLimit
+        rec(y + 1, acc ++ xCoords.map(x => Point(x, y)))
+      else acc
+    val points = rec(from.y, Set.empty[Point])
+    val toVec = grid.toVector
+    points.toVector.map(pt => toListIndex(pt.x, pt.y, gridWidth)).filter(idx => toVec.lift(idx).nonEmpty).toList.sorted
+
+  // Checks if a position lies inside rectangle within the grid
+  def checkOverlap[T](position: Point, rect: Rectangle, grid: List[T], gridWidth: Int): Boolean =
+    val index = toListIndex(position.x, position.y, gridWidth)
+    val rectOnGrid = findRectOnGrid(rect, grid, gridWidth)
+    rectOnGrid.contains(index)
+
+  // Uses the first two functions to decide is any positions are shared between to rectangles on the grid.
+  def checksIntersection[T](rect1: Rectangle, rect2: Rectangle, grid: List[T], gridWidth: Int): List[Int] =
+    val rectOnGrid1 = findRectOnGrid(rect1, grid, gridWidth)
+    val rectOnGrid2 = findRectOnGrid(rect2, grid, gridWidth)
+    rectOnGrid1 intersect rectOnGrid2
+
+
   def calculateFOV[T <: GameTileInterface](radius: Int, center: Point, tileMap: QuadTree[T]): List[Point] =
     val bounds: Rectangle =
       Rectangle(
