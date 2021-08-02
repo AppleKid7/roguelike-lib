@@ -4,7 +4,7 @@ import indigo._
 import indigo.lib.roguelike.DfTiles
 import indigo.lib.roguelike.terminal.MapTile
 
-class UtilsTests extends munit.FunSuite {
+class MapUtilsTests extends munit.FunSuite {
   test("should be able to get the correct indices from given Points") {
     val gridWidth = 4
     val pts = List(Point(0, 0), Point(1, 2), Point(3, 3))
