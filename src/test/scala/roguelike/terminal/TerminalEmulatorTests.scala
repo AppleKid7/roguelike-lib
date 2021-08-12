@@ -11,7 +11,7 @@ class TerminalEmulatorTests extends munit.FunSuite {
 
   test("should be able to put and get an element at a given position") {
     val console =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(Point(1, 1), Tile.`@`)
 
     val expected =
@@ -25,7 +25,7 @@ class TerminalEmulatorTests extends munit.FunSuite {
 
   test("should be able to put in the same element twice") {
     val console =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(Point(1, 1), Tile.`@`)
         .put(Point(2, 1), Tile.`@`)
 
@@ -39,7 +39,7 @@ class TerminalEmulatorTests extends munit.FunSuite {
 
   test("trying to get at an empty location returns None") {
     val console =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(Point(1, 1), Tile.`@`)
 
     val expected: Option[MapTile] =
@@ -60,7 +60,7 @@ class TerminalEmulatorTests extends munit.FunSuite {
       )
 
     val console =
-      TerminalEmulator(Size(10))
+      TerminalEmulator(Size(10), 100)
         .put(list)
 
     assert(
@@ -72,7 +72,7 @@ class TerminalEmulatorTests extends munit.FunSuite {
 
   test("continuous list (empty)") {
     val console =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
 
     val actual =
       console.toTileList(MapTile(Tile.`.`))
@@ -96,7 +96,7 @@ class TerminalEmulatorTests extends munit.FunSuite {
       coords.zip(List.fill(8)(MapTile(Tile.`!`)) :+ MapTile(Tile.`@`))
 
     val console =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(items)
 
     val actual =
@@ -147,7 +147,7 @@ class TerminalEmulatorTests extends munit.FunSuite {
       coords.zip(items)
 
     val console =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(itemsWithCoords)
 
     val actual =
@@ -172,11 +172,11 @@ class TerminalEmulatorTests extends munit.FunSuite {
 
   test("combine") {
     val consoleA =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(Point(1, 1), Tile.`@`)
 
     val consoleB =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(Point(2, 2), Tile.`!`)
 
     val combined =
@@ -188,11 +188,11 @@ class TerminalEmulatorTests extends munit.FunSuite {
 
   test("toList") {
     val consoleA =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(Point(1, 1), Tile.`@`)
 
     val consoleB =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(Point(2, 2), Tile.`!`)
 
     val expected =
@@ -207,11 +207,11 @@ class TerminalEmulatorTests extends munit.FunSuite {
 
   test("toPositionedList") {
     val consoleA =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(Point(1, 1), Tile.`@`)
 
     val consoleB =
-      TerminalEmulator(Size(3))
+      TerminalEmulator(Size(3), 9)
         .put(Point(2, 2), Tile.`!`)
 
     val expected =
@@ -226,7 +226,7 @@ class TerminalEmulatorTests extends munit.FunSuite {
 
   test("placing something in the center works.") {
     val console =
-      TerminalEmulator(Size(80, 50))
+      TerminalEmulator(Size(80, 50), 4000)
         .put(Point(40, 25), Tile.`@`)
 
     val expected =

@@ -8,7 +8,7 @@ import indigoextras.geometry.Vertex
 
 import scala.annotation.tailrec
 
-final case class TerminalEmulator(screenSize: Size, charMap: QuadTree[MapTile]):
+final case class TerminalEmulator(screenSize: Size, maxTileCount: Int, charMap: QuadTree[MapTile]):
 
   private val coordsList: List[Point] =
     (0 until screenSize.height).flatMap { y =>
@@ -47,7 +47,7 @@ final case class TerminalEmulator(screenSize: Size, charMap: QuadTree[MapTile]):
     coordsList.map(pt => get(pt).getOrElse(default))
 
   def draw(tileSheet: AssetName, charSize: Size, default: MapTile): TerminalEntity =
-    TerminalEntity(tileSheet, screenSize, charSize, toTileList(default))
+    TerminalEntity(tileSheet, screenSize, charSize, maxTileCount, toTileList(default))
 
   def toList: List[MapTile] =
     @tailrec
@@ -115,5 +115,5 @@ final case class TerminalEmulator(screenSize: Size, charMap: QuadTree[MapTile]):
     )
 
 object TerminalEmulator:
-  def apply(screenSize: Size): TerminalEmulator =
-    TerminalEmulator(screenSize, QuadTree.empty[MapTile](screenSize.width.toDouble, screenSize.height.toDouble))
+  def apply(screenSize: Size, maxTileCount: Int): TerminalEmulator =
+    TerminalEmulator(screenSize, maxTileCount, QuadTree.empty[MapTile](screenSize.width.toDouble, screenSize.height.toDouble))

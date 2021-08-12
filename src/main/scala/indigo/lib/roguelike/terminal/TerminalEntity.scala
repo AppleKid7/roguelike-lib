@@ -9,6 +9,7 @@ final case class TerminalEntity(
     tileSheet: AssetName,
     gridSize: Size,
     charSize: Size,
+    maxTileCount: Int,
     mask: RGBA,
     map: List[MapTile],
     position: Point,
@@ -53,8 +54,7 @@ final case class TerminalEntity(
     this.copy(depth = newDepth)
 
   private val count       = gridSize.width * gridSize.height
-  private val total       = 4096
-  private val emptyColors = Array.fill(total - count)(vec4(0.0f, 0.0f, 0.0f, 0.0f))
+  private val emptyColors = Array.fill(maxTileCount - count)(vec4(0.0f, 0.0f, 0.0f, 0.0f))
 
   private lazy val fgArray =
     (map.map { t =>
@@ -86,24 +86,24 @@ final case class TerminalEntity(
       UniformBlock(
         "RogueLikeMapForeground",
         List(
-          Uniform("CHAR_FOREGROUND") -> array(total, fgArray)
+          Uniform("CHAR_FOREGROUND") -> array(maxTileCount, fgArray)
         )
       ),
       UniformBlock(
         "RogueLikeMapBackground",
         List(
-          Uniform("BACKGROUND") -> array(total, bgArray)
+          Uniform("BACKGROUND") -> array(maxTileCount, bgArray)
         )
       )
     ).withChannel0(tileSheet)
 
 object TerminalEntity:
 
-  def apply(tileSheet: AssetName, gridSize: Size, charSize: Size): TerminalEntity =
-    TerminalEntity(tileSheet, gridSize, charSize, RGBA.Magenta, Nil, Point.zero, Depth(1))
+  def apply(tileSheet: AssetName, gridSize: Size, charSize: Size, maxTileCount: Int): TerminalEntity =
+    TerminalEntity(tileSheet, gridSize, charSize, maxTileCount, RGBA.Magenta, Nil, Point.zero, Depth(1))
 
-  def apply(tileSheet: AssetName, gridSize: Size, charSize: Size, map: List[MapTile]): TerminalEntity =
-    TerminalEntity(tileSheet, gridSize, charSize, RGBA.Magenta, map, Point.zero, Depth(1))
+  def apply(tileSheet: AssetName, gridSize: Size, charSize: Size, maxTileCount: Int, map: List[MapTile]): TerminalEntity =
+    TerminalEntity(tileSheet, gridSize, charSize, maxTileCount, RGBA.Magenta, map, Point.zero, Depth(1))
 
   val shaderId: ShaderId =
     ShaderId("map shader")
