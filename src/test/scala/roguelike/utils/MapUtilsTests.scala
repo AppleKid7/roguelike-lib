@@ -192,7 +192,8 @@ class MapUtilsTests extends munit.FunSuite {
       List(
         Point(8, 3),
         Point(7, 4),
-        Point(6, 5)
+        Point(6, 5),
+        Point(5, 5) // The line would in fact go past this, but the destination is artificially added.
       ).reverse
 
     assertEquals(actual, expected)

@@ -51,7 +51,8 @@ object MapUtils {
     @tailrec
     def rec(x: Int, y: Int, err: Int, acc: List[Point]): List[Point] =
       val next = Point(x, y)
-      if (x == x1 && y == y1) || next.distanceTo(to) <= 1 then next :: acc
+      if (x == x1 && y == y1) then next :: acc
+      else if next.distanceTo(to) <= 1 then to :: next :: acc
       else
         var e  = err
         var x2 = x
