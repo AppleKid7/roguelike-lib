@@ -23,20 +23,6 @@ class TerminalEmulatorTests extends munit.FunSuite {
     assertEquals(expected, actual)
   }
 
-  test("should be able to put in the same element twice") {
-    val console =
-      TerminalEmulator(Size(3), 9)
-        .put(Point(1, 1), Tile.`@`)
-        .put(Point(2, 1), Tile.`@`)
-
-    val expected =
-      Option(MapTile(Tile.`@`, RGB.White, RGBA.Zero))
-
-    assert(console.toList.length == 2)
-    assertEquals(expected, console.get(Point(1, 1)))
-    assertEquals(expected, console.get(Point(2, 1)))
-  }
-
   test("trying to get at an empty location returns None") {
     val console =
       TerminalEmulator(Size(3), 9)
@@ -68,6 +54,32 @@ class TerminalEmulatorTests extends munit.FunSuite {
         clue(console.get(clue(v))) == list.find(p => p._1 == v).map(_._2)
       }
     )
+  }
+
+  test("should be able insert a line of text") {
+    val console =
+      TerminalEmulator(Size(10), 100)
+        .putLine(Point(1, 3), "Hello", RGB.Red, RGBA.Blue)
+
+    val actual =
+      List(
+        console.get(Point(1, 3)),
+        console.get(Point(2, 3)),
+        console.get(Point(3, 3)),
+        console.get(Point(4, 3)),
+        console.get(Point(5, 3)),
+      ).collect { case Some(s) => s }
+
+    val expected =
+      List(
+        MapTile(Tile.`H`, RGB.Red, RGBA.Blue),
+        MapTile(Tile.`e`, RGB.Red, RGBA.Blue),
+        MapTile(Tile.`l`, RGB.Red, RGBA.Blue),
+        MapTile(Tile.`l`, RGB.Red, RGBA.Blue),
+        MapTile(Tile.`o`, RGB.Red, RGBA.Blue)
+      )
+
+    assertEquals(actual, expected)
   }
 
   test("continuous list (empty)") {
@@ -226,7 +238,7 @@ class TerminalEmulatorTests extends munit.FunSuite {
 
   test("placing something in the center works.") {
     val console =
-      TerminalEmulator(Size(80, 50), 4000)
+      TerminalEmulator(Size(80, 50), 4096)
         .put(Point(40, 25), Tile.`@`)
 
     val expected =
